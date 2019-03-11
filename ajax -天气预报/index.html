@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    #div{
+        width:250px;
+        height: 180px;
+        background: rgba(200,54,54,0.2);
+    }
+    #box{
+        width: 250px;
+        height: 120px;
+        background: rgba(200, 54, 54, 0.2);
+    }
+    </style>
+</head>
+<body>
+    <div id="div"></div>
+    <div id="box"></div>
+    <input  type="text" id="ipt">
+    <button id="btn">点击刷新</button>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    function fn(id){
+        $.ajax({
+            type: 'Get',
+            url: 'http://v.juhe.cn/weather/index?format=2&cityname='+id+'&key=3c3f013403758ac05f94303175384449',
+            dataType: 'jsonp',
+            jsonp: 'callback',
+            success: function(data){
+                console.log("ok");
+                var sk = data.result.sk;
+                var today = data.result.today;
+                var future = data.result.future;
+                $('#div').append("<p>" + '当前:  ' + sk.temp + '℃  , ' + sk.wind_direction + sk.wind_strength + ' , ' + '空气湿度' + sk.humidity + ' , 更新时间' + sk.time + "</p><p style='padding-bottom: 10px;'>" + today.city + ' 今天是:  ' + today.date_y + ' ' + today.week + ' , ' + today.temperature + ' , ' + today.weather + ' , ' + today.wind + "<p></p>");
+                $('#box').append("<p>" + '未来:  ' + future[0].temperature+ '℃  , ' + future[0].weather + future[0].wind + ' , ' + ' , 更新时间' + future[0].week+future[0].date + "</p><p style='padding-bottom: 10px;'>" + today.city + "<p></p>");
+            }
+
+        })
+    }
+
+    $('#btn').click(function(){
+        var val = $('#ipt').val();
+        fn(val);
+    });
+</script>
+</html>
